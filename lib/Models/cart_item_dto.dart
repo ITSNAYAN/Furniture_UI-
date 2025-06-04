@@ -1,6 +1,5 @@
 class CartItemDto {
   String name;
-  
   String image;
   double price;
   String description;

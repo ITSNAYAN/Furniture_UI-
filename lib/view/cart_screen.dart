@@ -1,30 +1,31 @@
-import 'package:basic_ui/globals.dart';
-import 'package:basic_ui/homepage.dart';
+import 'package:basic_ui/controller/dashboardController.dart';
+import 'package:basic_ui/controller/globals.dart';
+import 'package:basic_ui/view/dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class Cart extends StatefulWidget {
-  const Cart({super.key});
-
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
   @override
-  State<Cart> createState() => _CartState();
+  State<CartScreen> createState() => _CartState();
 }
 int totalQuantity = 0;
-double totalPrice= 0.0;
+double totalPrice = 0.0;
 
 bool ischange_color = false;
 
-class _CartState extends State<Cart> {
-
+class _CartState extends State<CartScreen> {
+  final DashboardController _itemController = Get.put(DashboardController());
 
   void incrementQuantity(int index) {
-    cartItemsGlobel[index].quantity++;
+    cartItem[index].quantity++;
     totalCalculate();
     setState(() {});
   }
 
   void decrementQuantity(int index) {
-    if (cartItemsGlobel[index].quantity > 1) {
-      cartItemsGlobel[index].quantity--;
+    if (cartItem[index].quantity > 1) {
+      cartItem[index].quantity--;
       setState(() {});
     } else {
       showDialog(
@@ -36,10 +37,9 @@ class _CartState extends State<Cart> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                       items.removeWhere((test)=> test.name == cartItemsGlobel[index].name);
-                      cartItemsGlobel.removeAt(index);
-                     
-                  // cartItemsGlobel [index].ischecked = false;
+                      //    items.removeWhere((test) => test.name == cartItem[index].name);
+                      cartItem.removeAt(index);
+                      // cartItemsGlobel [index].ischecked = false;
                     });
                     Navigator.of(context).pop();
                   },
@@ -58,18 +58,17 @@ class _CartState extends State<Cart> {
     }
     totalCalculate();
   }
-  void totalCalculate (){
-    totalQuantity= 0;
-    totalPrice=0.0;
-    for (var item in cartItemsGlobel){
-         if (item.ischecked){
-          totalQuantity += item.quantity;
-          totalPrice = totalQuantity*item.price;
-         }
-    }
-    setState(() {
-    });
 
+  void totalCalculate() {
+    totalQuantity = 0;
+    totalPrice = 0.0;
+    for (var item in cartItem) {
+      if (item.ischecked) {
+        totalQuantity += item.quantity;
+        totalPrice = totalQuantity * item.price;
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -87,7 +86,6 @@ class _CartState extends State<Cart> {
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
-                    
                     },
                     icon: const Icon(
                       Icons.arrow_back,
@@ -128,30 +126,27 @@ class _CartState extends State<Cart> {
               height: 30,
             ),
             Expanded(
-              child: cartItemsGlobel.isEmpty
+              child: cartItem.isEmpty
                   ? const Center(
                       child: Text(
                         "Cart is Empty",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     )
                   : ListView.separated(
-                      itemCount: cartItemsGlobel.length,
+                      itemCount: cartItem.length,
                       separatorBuilder: (context, index) => const Divider(
                             thickness: 0,
                           ),
                       itemBuilder: (context, index) {
-                        final item = cartItemsGlobel[index];
+                        final item = cartItem[index];
                         return Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Row(
                             children: [
-                          
                               Checkbox(
                                 value: item.ischecked,
-                                activeColor:
-                                    item.ischecked ? Colors.red : Colors.blue,
+                                activeColor: item.ischecked ? Colors.red : Colors.blue,
                                 onChanged: (bool? value) {
                                   item.ischecked = value ?? false;
                                   totalCalculate();
@@ -177,9 +172,7 @@ class _CartState extends State<Cart> {
                                 children: [
                                   Text(
                                     item.name,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(
                                     height: 30,
@@ -187,11 +180,8 @@ class _CartState extends State<Cart> {
                                   Row(
                                     children: [
                                       Text(
-                                      "\$${item.price}",
-                                        style: TextStyle(
-                                            color: Colors.red[400],
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
+                                        "\$${item.price}",
+                                        style: TextStyle(color: Colors.red[400], fontSize: 16, fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
                                         width: 30,
@@ -199,38 +189,31 @@ class _CartState extends State<Cart> {
                                       Container(
                                         height: 30,
                                         decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              255, 131, 193, 243),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          color: const Color.fromARGB(255, 131, 193, 243),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         child: FittedBox(
                                           fit: BoxFit.contain,
                                           child: Row(
                                             children: [
                                               IconButton(
-                                                onPressed: () =>
-                                                    incrementQuantity(index),
+                                                onPressed: () => incrementQuantity(index),
                                                 icon: const Icon(
                                                   Icons.add,
                                                   size: 20,
-                                                  color: Color.fromARGB(
-                                                      255, 0, 0, 0),
+                                                  color: Color.fromARGB(255, 0, 0, 0),
                                                 ),
                                               ),
                                               Text(
                                                 item.quantity.toString(),
-                                                style: const TextStyle(
-                                                    fontSize: 20),
+                                                style: const TextStyle(fontSize: 20),
                                               ),
                                               IconButton(
-                                                onPressed: () =>
-                                                    decrementQuantity(index),
+                                                onPressed: () => decrementQuantity(index),
                                                 icon: const Icon(
                                                   Icons.remove,
                                                   size: 20,
-                                                  color: Color.fromARGB(
-                                                      255, 0, 0, 0),
+                                                  color: Color.fromARGB(255, 0, 0, 0),
                                                 ),
                                               ),
                                             ],
@@ -257,9 +240,7 @@ class _CartState extends State<Cart> {
                     ),
                   ],
                   color: Color.fromARGB(255, 231, 248, 255),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30))),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))),
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Column(
@@ -271,10 +252,7 @@ class _CartState extends State<Cart> {
                       children: [
                         const Text(
                           'Total items',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 97, 97, 97),
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 97, 97, 97), fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '\$${totalQuantity.toStringAsFixed(2)}',
@@ -288,15 +266,12 @@ class _CartState extends State<Cart> {
                     const SizedBox(
                       height: 10,
                     ),
-                     Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           'Total',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 97, 97, 97),
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 97, 97, 97), fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '\$${totalPrice.toStringAsFixed(2)}',
@@ -315,10 +290,7 @@ class _CartState extends State<Cart> {
                       children: [
                         const Text(
                           'Shipping fee',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 97, 97, 97),
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 97, 97, 97), fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '\$50',
@@ -362,18 +334,13 @@ class _CartState extends State<Cart> {
                     ),
                     Container(
                       // color: Colors.blue,
-                      decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                          borderRadius: BorderRadius.circular(30)),
+                      decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 0, 0), borderRadius: BorderRadius.circular(30)),
                       height: 50,
                       width: double.infinity,
                       child: const Center(
                           child: Text(
                         'Checkout',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                       )),
                     )
                   ],
