@@ -84,22 +84,34 @@ class _HomepageState extends State<DashboardScreen> {
                 decoration: const BoxDecoration(color: Colors.grey),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.25,
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 20,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
                         ),
-                      ],
-                    )
-                    // profileimage
-                  ],
+                        child: Icon(Icons.person, size: 50, color: Colors.grey),
+                      ),
+                      SizedBox(width: 20,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Nayan Soni", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          Text("View Profile", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.grey[800])),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              )
+              ),
+              Text("hello"),
             ],
           ),
         ),

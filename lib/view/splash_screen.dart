@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'dashboard_screen.dart';
 
@@ -7,10 +8,13 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _navigateToHome(context);
-    return const Scaffold(
-        body: Column(children: [
-            Center(child: Text("splash Screen")),
+     _navigateToHome(context);
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 231, 248, 255),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Center(child: Text("Oak & Essence",style:  GoogleFonts.dancingScript(fontSize: 30,fontWeight: FontWeight.bold),)),
         ]),);
   }
   void _navigateToHome(BuildContext context) {
